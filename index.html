@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор заклинаний</title>
+    <link rel="stylesheet" href="style.css"> <!-- Подключаем CSS -->
+	<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>SPELL GEN!</h1>
+		<h2>Создай своё заклинание</h2>
+        <form id="spellForm">
+            <label for="spellName">Название заклинания:</label>
+            <input id="spellName" name="spellName" placeholder="Введите название">
+
+            <label for="spellPath">Путь:</label>
+            <select id="spellPath" name="spellPath" onchange="handlePathChange()">
+                <option value="">Выберите путь</option>
+                <option value="пламени">Пламени</option>
+                <option value="грозы">Грозы</option>
+                <option value="дождя">Дождя</option>
+                <option value="мороза">Мороза</option>
+                <option value="цветения">Цветения</option>
+                <option value="камня">Камня</option>
+                <option value="руды">Руды</option>
+                <option value="ветра">Ветра</option>
+                <option value="звука">Звука</option>
+                <option value="миража">Миража</option>
+                <option value="жизни">Жизни</option>
+                <option value="смерти">Смерти</option>
+                <option value="души">Души</option>
+                <option value="custom">Свой путь</option>
+            </select>
+            <input id="customPath" name="customPath" placeholder="Введите свой путь" style="display: none;">
+
+            <label for="castingTime">Время накладывания:</label>
+            <select id="castingTime" name="castingTime">
+                <option value="">Выберите время</option>
+                <option value="instant">Мгновенно</option>
+                <option value="1">1 ход</option>
+                <option value="2">2 хода</option>
+                <option value="3">3 хода</option>
+            </select>
+
+            <label for="duration">Длительность:</label>
+            <select id="duration" name="duration">
+                <option value="">Выберите длительность</option>
+                <option value="none">Нет</option>
+                <option value="1">1 ход</option>
+                <option value="2">2 хода</option>
+                <option value="3">3 хода</option>
+                <option value="5">5 ходов</option>
+                <option value="10">10 ходов</option>
+                <option value="30">30 ходов</option>
+                <option value="60">60 ходов</option>
+                <option value="permanent">Постоянно</option>
+            </select>
+
+            <label for="distance">Дистанция (метры):</label>
+            <input id="distance" name="distance" type="number" placeholder="0" min="0">
+
+            <label for="radius">Радиус действия (метры):</label>
+            <input id="radius" name="radius" type="number" placeholder="0" min="0">
+
+            <label for="damage">Урон:</label>
+            <select id="damage" name="damage">
+                <option value="">Выберите урон</option>
+                <option value="none">Нет</option>
+                <option value="minor">Незначительный</option>
+                <option value="small">Малый</option>
+                <option value="medium">Средний</option>
+                <option value="serious">Серьёзный</option>
+                <option value="lethal">Смертельный</option>
+                <option value="disintegration">Дизинтеграция</option>
+            </select>
+
+            <label for="description">Описание:</label>
+            <textarea id="description" name="description" placeholder="Опишите эффект заклинания" rows="3"></textarea>
+
+            <button type="submit">СОЗДАТЬ!</button>
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+    <script src="script.js"></script> <!-- Подключаем JavaScript -->
+</body>
+</html>
