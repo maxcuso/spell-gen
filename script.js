@@ -40,43 +40,43 @@ function calculateSpellLevel(spellData) {
     
     // Модификаторы за время накладывания
     if (spellData.castingTime === "instant") {
-        level += 0.7;
+        level += 0.5;
     } else if (spellData.castingTime) {
         const castingTurns = parseInt(spellData.castingTime);
-        level += 0.7-castingTurns*0.2;
+        level += 0.5 - castingTurns * 0.15;
     }
     
     // Модификаторы за длительность
     if (spellData.duration === "none") {
         level += 0;
     } else if (spellData.duration === "permanent") {
-        level += 3;
+        level += 2.5;
     } else if (spellData.duration) {
         const durationTurns = parseInt(spellData.duration);
-        level += durationTurns * 0.2;
+        level += durationTurns * 0.15;
     }
     
     // Модификаторы за дистанцию
     if (spellData.distance) {
         const distance = parseInt(spellData.distance);
-        level += distance * 0.1;
+        level += distance * 0.08;
     }
     
     // Модификаторы за радиус
     if (spellData.radius) {
         const radius = parseInt(spellData.radius);
-        level += radius * 0.3;
+        level += radius * 0.25;
     }
     
     // Модификаторы за урон
     if (spellData.damage && spellData.damage !== "none") {
         const damageModifiers = {
             "minor": 0.1,
-            "small": 0.2,
-            "medium": 0.5,
-            "serious": 1.2,
-            "lethal": 1.7,
-            "disintegration": 2
+            "small": 0.3,
+            "medium": 0.8,
+            "serious": 1.5,
+            "lethal": 2.5,
+            "disintegration": 4.0
         };
         level += damageModifiers[spellData.damage] || 0;
     }
@@ -86,20 +86,19 @@ function calculateSpellLevel(spellData) {
 }
 
 function calculateManaCost(level) {
-    // Расчет маны на основе нецелого уровня (без рандома)
+    // Расчет маны на основе нецелого уровня
     let baseMana;
     if (level <= 1.9) {
-        baseMana = 1 + (level - 1) * 5; // 2-4 для уровня 1
-    } else if (level <= 3) {
-        baseMana = 5 + (level - 2) * 10; // 5-15 для уровня 2
-    } else if (level <= 4) {
-        baseMana = 16 + (level - 3) * 15; // 16-30 для уровня 3
-    } else if (level <= 5) {
-        baseMana = 30 + (level - 4) * 20; // 30-49 для уровня 4
+        baseMana = 2 + (level - 1) * 3; // 2-5 для уровня 1
+    } else if (level <= 2.9) {
+        baseMana = 6 + (level - 2) * 9; // 6-15 для уровня 2
+    } else if (level <= 3.9) {
+        baseMana = 16 + (level - 3) * 9; // 16-25 для уровня 3
+    } else if (level <= 4.9) {
+        baseMana = 26 + (level - 4) * 14; // 26-40 для уровня 4
     } else {
-        baseMana = 50 + (level - 5) * 30; // 50-100 для уровня 5+
+        baseMana = 50 + (level - 5) * 50; // 50-100 для уровня 5+
     }
-    
     
     return Math.floor(baseMana);
 }
@@ -136,8 +135,22 @@ function generateSpell(spellData) {
     
     const rawLevel = calculateSpellLevel(spellData);
     const manaCost = calculateManaCost(rawLevel);
-    const level = Math.min(5, Math.max(1, Math.round(rawLevel)));
-    const romanLevel = toRoman(level);
+    
+    // Определяем уровень для отображения на основе диапазонов маны
+    let displayLevel;
+    if (rawLevel <= 1.9) {
+        displayLevel = 1;
+    } else if (rawLevel <= 2.9) {
+        displayLevel = 2;
+    } else if (rawLevel <= 3.9) {
+        displayLevel = 3;
+    } else if (rawLevel <= 4.9) {
+        displayLevel = 4;
+    } else {
+        displayLevel = 5;
+    }
+    
+    const romanLevel = toRoman(displayLevel);
     
     // Форматирование времени накладывания
     let castingTimeText = "";
@@ -165,7 +178,7 @@ function generateSpell(spellData) {
     const distance = parseInt(spellData.distance) || 0;
     const radius = parseInt(spellData.radius) || 0;
     
-    const distanceText = distance === 0 ? "Касание" : `${distance}м`;
+    const distanceText = distance === 0 ? "Касание" : `${distance} м`;
     
     // Форматирование пути с правильными падежами
     const pathPhrases = {
@@ -200,7 +213,7 @@ function generateSpell(spellData) {
     result += `<p><strong>Дистанция:</strong> ${distanceText}</p>`;
     
     if (radius > 0) {
-        result += `<p><strong>Радиус действия:</strong> ${radius}м</p>`;
+        result += `<p><strong>Радиус действия:</strong> ${radius} м</p>`;
     }
     
     if (spellData.damage && spellData.damage !== "none") {
